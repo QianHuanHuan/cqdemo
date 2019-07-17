@@ -36,6 +36,14 @@ public class Computer {
     }
 
     /**
+     * 处理计算结果 返回 String
+     * @param formula 公式
+     * @return 值-String
+     */
+    public static String computerToStr(String formula) {
+        return SysUtil.toStr(computerInfo(formula));
+    }
+    /**
      * 处理计算结果
      * @param formula 公式
      * @return 值

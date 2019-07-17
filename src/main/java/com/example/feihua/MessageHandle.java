@@ -19,43 +19,53 @@ public class MessageHandle extends CQHandle {
         System.out.println(SysUtil.isComputer("9+9+9423+9+9+6+2*9-6/9/9/9/8/7*9+6"));
 
         //System.out.println(MessageHandle.loadInfo("apihttps://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?acceptor=重庆诚雪货运代理有限公司"));
-       // System.out.println(MessageHandle.loadInfo(("apihttps://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?acceptor=重庆诚雪货运代理有限公司")));
+        System.out.println(MessageHandle.loadInfo(("apihttps://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?acceptor=重庆诚雪货运代理有限公司")));
         //
-        System.out.println(MessageHandle.loadInfo(("apihttps://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?{ \"acceptor\": \"重庆诚雪货运代理有限公司\" }\n")));
+        //System.out.println(MessageHandle.loadInfo(("apihttps://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?{ \"acceptor\": \"重庆诚雪货运代理有限公司\" }\n")));
     }
 
     public static String loadInfo(String msg) {
         //https://www.cuohepai.com/mam/order/v1/mainOrderPages.do
         //https://sit.cuohepai.com/cuohepai_bui/robot/test/order/heartbeat
         //https://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList
+        System.out.println(msg);
         try{
 
             if(SysUtil.isComputer(msg)){
+                System.out.println("T1");
                 msg =  Computer.computerInfo(msg)+"";
             }else if(msg.startsWith("get")){
                 msg = msg.substring(3);
-                System.out.println(msg);
                 if(msg.indexOf("?")>=0){
+                    System.out.println("K1");
                     String[] url = msg.split("[?]");
                     msg = HttpRequest.sendPost(url[0],url[1]);
                 }else {
+                    System.out.println("K2");
                     msg = HttpRequest.sendPost(msg,"");
                 }
             }else if(msg.startsWith("api")){
                 msg = msg.substring(3);
-                System.out.println(msg);
                 if(msg.indexOf("?")>=0){
-                    if(msg.indexOf("?")>=0){
+                    if(msg.indexOf("\"")>=0){
+                        System.out.println("S1");
                         String[] url = msg.split("[?]");
                         msg = HttpRequest.sendPost(url[0],url[1]);
                     }else {
                         String[] url = getUrl(msg);
+                        System.out.println("S2");
                         msg = HttpRequest.sendPost(url[0], url[1]);
                     }
                 }else {
+                    System.out.println("S3");
                     msg = HttpRequest.sendPost(msg,"");
                 }
                 //msg = HttpRequest.sendPost(msg, "{\"acceptor\":\"重庆诚雪货运代理有限公司\"}");
+            }else if(msg.startsWith("tst")){
+                msg = "https://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?acceptor=重庆诚雪货运代理有限公司";
+                String[] url = getUrl(msg);
+                System.out.println("S2-A");
+                msg = HttpRequest.sendPost(url[0], url[1]);
             }
         }catch (Exception e){
             e.printStackTrace();

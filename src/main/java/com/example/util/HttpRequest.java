@@ -73,6 +73,8 @@ public class HttpRequest {
      */
     public static String sendPost(String url, String param) {
         param = param.replace(" ","");
+        System.out.println("url:"+url);
+        System.out.println("param:"+param);
         PrintWriter out = null;
         BufferedReader in = null;
         String result = "";

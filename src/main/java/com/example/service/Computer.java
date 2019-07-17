@@ -5,6 +5,9 @@ import com.example.util.SysUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 计算
+ */
 public class Computer {
 
 
@@ -32,23 +35,35 @@ public class Computer {
         return val;
     }
 
-
+    /**
+     * 处理计算结果
+     * @param formula 公式
+     * @return 值
+     */
     public static double computerInfo(String formula) {
         int len = formula.length();
         StringBuffer buffer = new StringBuffer();
         double val = 0.0;
+        // 去除空格
         formula = formula.replace(" ", "");
+        // listSum 数值
         List<Double> listSum = new ArrayList<>();
+        // listType 算式符号
         List<String> listType = new ArrayList<>();
+
         for (int i = 0; i <= len; i++) {
             String ks = "";
+            //获取单个字符
             if (i != len) {
                 ks = formula.substring(i, i + 1);
             }
+            //判断是否为数字 如果是拼接为一个完整数字
             if (SysUtil.isNumber(ks)) {
                 buffer.append(ks);
             } else {
+                //把拼接数字转double存入集合
                 listSum.add(SysUtil.toDub(buffer.toString()));
+                //把运算符存入集合
                 listType.add(ks);
                 buffer = new StringBuffer();
             }
@@ -58,44 +73,58 @@ public class Computer {
         List<Integer[]> listAj = loadListInt(listType);
 
 
+        //处理后 数值
         List<Double> listSumX = new ArrayList<>();
+        //处理后 运算符
         List<String> listTypeX = new ArrayList<>();
 
+        //每轮乘除运算 数值
         List<Double> listSumS = new ArrayList<>();
+        //每轮乘除运算 运算符
         List<String> listTypeS = new ArrayList<>();
 
         for (int i = 0; i < listSum.size(); i++) {
 
-            Double end = listSum.get(i);
-            String type = listType.get(i);
+            Double end = listSum.get(i);//值
+            String type = listType.get(i);//运算符
+
             for (int j = 0; j < listAj.size(); j++) {
+                //判断是否序号等于 乘除运算开始的序号
                 if(i == listAj.get(j)[0]){
+                    //清空
                     listSumS = new ArrayList<>();
                     listTypeS = new ArrayList<>();
+                    // 循环写入 乘除运算
                     for (int k = 0; k <= listAj.get(j)[1]; k++) {
+                        //i+k 获取运算符下标
                         listSumS.add(listSum.get(i+k));
                         listTypeS.add(listType.get(i+k));
                         System.out.println("公式:"+listSum.get(i+k)+listType.get(i+k));
                     }
+                    //获取乘除运算结果
                     end = divisionList(listSumS,listTypeS);
+                    //获取当前位置的运算符
                     type = listType.get(i+listAj.get(j)[1]);
+                    //i 加上 因乘除跳过的步数
                     i+=listAj.get(j)[1];
                     break;
                 }
             }
+            //写入处理后的值
             listSumX.add(end);
             listTypeX.add(type);
         }
 
+        //获取和
         val = subtractionList(listSumX,listTypeX);
 
         return val;
     }
 
     /***
-     * 获取 等级运算
+     * 获取 等级运算 先乘除后加减 获取乘除的位置
      * @param listType 运算符集合
-     * @return
+     * @return 乘除的位置
      */
     public static List<Integer[]> loadListInt(List<String> listType){
         List<Integer[]> listAj = new ArrayList<>();
@@ -105,6 +134,7 @@ public class Computer {
                 j++;
             }else {
                 if(j!=0){
+                    //<j>保存连续个数 和 <i-j>开始位数
                     listAj.add(new Integer[]{(i-j),j});
                     System.out.println("j:"+j+" I:"+(i-j));
                 }
@@ -114,11 +144,19 @@ public class Computer {
         return listAj;
     }
 
+    /**
+     * 加减运算
+     * @param listSum 数字集合
+     * @param listType 运算符集合
+     * @return 结果值
+     */
     public static Double subtractionList(List<Double> listSum,List<String> listType){
         Double val = 0.0;
         for (int i = 0; i < listSum.size() - 1; i++) {
             if (i == 0) val = listSum.get(i);
+            //第二个值
             double dev = listSum.get(i + 1);
+            //判断运算符
             switch (listType.get(i)) {
                 case "+":
                     val = val + dev;
@@ -133,11 +171,20 @@ public class Computer {
         System.out.println("加减:"+val);
         return val;
     }
+
+    /**
+     * 乘除运算
+     * @param listSum 数字集合
+     * @param listType 运算符集合
+     * @return 结果值
+     */
     public static Double divisionList(List<Double> listSum,List<String> listType){
         Double val = 0.0;
         for (int i = 0; i < listSum.size() - 1; i++) {
             if (i == 0) val = listSum.get(i);
+            //第二个值
             double dev = listSum.get(i + 1);
+            //判断运算符
             switch (listType.get(i)) {
                 case "*":
                     val = val * dev;

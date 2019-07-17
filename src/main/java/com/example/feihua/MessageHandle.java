@@ -5,11 +5,7 @@ import com.example.service.Computer;
 import com.example.util.HttpRequest;
 import com.example.util.SysUtil;
 
-import java.util.Map;
-
 public class MessageHandle extends CQHandle {
-
-
 
 
 
@@ -24,6 +20,11 @@ public class MessageHandle extends CQHandle {
         //System.out.println(MessageHandle.loadInfo(("apihttps://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?{ \"acceptor\": \"重庆诚雪货运代理有限公司\" }\n")));
     }
 
+    /**
+     * 消息处理
+     * @param msg 输出参数
+     * @return 返回信息
+     */
     public static String loadInfo(String msg) {
         //https://www.cuohepai.com/mam/order/v1/mainOrderPages.do
         //https://sit.cuohepai.com/cuohepai_bui/robot/test/order/heartbeat
@@ -31,11 +32,14 @@ public class MessageHandle extends CQHandle {
         System.out.println(msg);
         try{
 
+            //判断是否为计算公式
             if(SysUtil.isComputer(msg)){
                 System.out.println("T1");
                 msg =  Computer.computerInfo(msg)+"";
             }else if(msg.startsWith("get")){
+                //去除开始get
                 msg = msg.substring(3);
+                //是否有带参数
                 if(msg.indexOf("?")>=0){
                     System.out.println("K1");
                     String[] url = msg.split("[?]");
@@ -45,8 +49,11 @@ public class MessageHandle extends CQHandle {
                     msg = HttpRequest.sendPost(msg,"");
                 }
             }else if(msg.startsWith("api")){
+                //去除开始api
                 msg = msg.substring(3);
+                //是否有带参数
                 if(msg.indexOf("?")>=0){
+                    //判断是否为JSON参数
                     if(msg.indexOf("\"")>=0){
                         System.out.println("S1");
                         String[] url = msg.split("[?]");
@@ -74,6 +81,11 @@ public class MessageHandle extends CQHandle {
         return msg;//SysUtil.character(dens,SysUtil.UTF8);
     }
 
+    /**
+     * a=4&c=5 转换为JSON 数据格式
+     * @param msg 待转换
+     * @return 结果
+     */
     public static String[] getUrl(String msg){
         String[] url = msg.split("[?]");
         String[] ps = url[1].split("&");

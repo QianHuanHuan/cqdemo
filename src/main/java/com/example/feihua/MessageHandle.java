@@ -35,9 +35,9 @@ public class MessageHandle extends CQHandle {
             //判断是否为计算公式
             if(SysUtil.isComputer(msg)){
                 msg =  Computer.computerToStr(msg);
-            }else if(msg.startsWith("get")){
+            }else if(msg.startsWith("get")){//获取get请求结果
                 msg = RequestUtil.loadGet(msg);
-            }else if(msg.startsWith("post")){
+            }else if(msg.startsWith("post")){//获取post请求结果
                 msg = RequestUtil.loadPost(msg);
             }
 

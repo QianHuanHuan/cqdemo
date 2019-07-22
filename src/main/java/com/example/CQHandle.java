@@ -178,7 +178,7 @@ public class CQHandle extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
         // 解析消息中的图片
         //CQImage image = CC.getCQImage(msg);// 此方法为简便方法，获取第一个CQ:image里的图片数据，错误时打印异常到控制台，返回 null
         //List<CQImage> images = CC.getCQImages(msg);// 此方法为获取消息中所有的CQ图片数据，错误时打印异常到控制台，返回 已解析的数据
-        if(msg.startsWith("~")){
+        if(msg.startsWith("~")||msg.startsWith("～")){
 
             msg = msg.substring(1);
             msg = MessageHandle.loadInfo(msg);

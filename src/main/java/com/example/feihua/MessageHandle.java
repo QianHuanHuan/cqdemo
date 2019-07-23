@@ -13,10 +13,11 @@ public class MessageHandle extends CQHandle {
 
     public static void main(String[] args) {
 
-        System.out.println(SysUtil.isComputer("9+9+9423+9+9+6+2*9-6/9/9/9/8/7*9+6"));
-
+        System.out.println(SysUtil.isComputer("6*8"));
+        //System.out.println(SysUtil.isComputer("9+9+9423+9+9+6+2*9-6/9/9/9/8/7*9+6"));
+        System.out.println(MessageHandle.loadInfo(("6*8")));
         //System.out.println(MessageHandle.loadInfo("apihttps://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?acceptor=重庆诚雪货运代理有限公司"));
-        System.out.println(MessageHandle.loadInfo(("posthttps://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?acceptor=重庆诚雪货运代理有限公司")));
+       // System.out.println(MessageHandle.loadInfo(("posthttps://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?acceptor=重庆诚雪货运代理有限公司")));
         //
         //System.out.println(MessageHandle.loadInfo(("apihttps://sit.cuohepai.com/cuohepai_bui/management/acceptance/findList?{ \"acceptor\": \"重庆诚雪货运代理有限公司\" }\n")));
     }
@@ -33,7 +34,8 @@ public class MessageHandle extends CQHandle {
         try{
 
             //判断是否为计算公式
-            if(SysUtil.isComputer(msg)){
+            if(SysUtil.isComputer(msg.replace(" ",""))){
+                msg = "0+"+msg.replace(" ","");
                 msg =  Computer.computerToStr(msg);
             }else if(msg.startsWith("get")){//获取get请求结果
                 msg = RequestUtil.loadGet(msg);
